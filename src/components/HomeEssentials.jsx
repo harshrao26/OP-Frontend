@@ -1,6 +1,6 @@
 import React from 'react'
 import Filters from './Filters'
-import naturemedica from '../assets/product specfic banner/dryfruits.png'
+import naturemedica from '../assets/product specfic banner/home.png'
 const NatureMedica = () => {
   return (
     <>

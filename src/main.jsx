@@ -8,10 +8,10 @@ import { CartProvider } from "./context/CartContext"; // Import CartProvider
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-      <AuthProvider>
-    <CartProvider>
+    <AuthProvider>
+      <CartProvider>
         <App />
-    </CartProvider>
-      </AuthProvider>
+      </CartProvider>
+    </AuthProvider>
   </BrowserRouter>
 );
