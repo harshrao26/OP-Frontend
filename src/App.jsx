@@ -7,6 +7,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProductDetails from "./components/ProductDetails";
 import CartPage from "./components/CartPage";
+import NatureMedica from "./components/NatureMedica.jsx";
+import DryFruits from "./components/DryFruits.jsx";
 export default function App() {
   return (
    <>
@@ -16,6 +18,9 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/cart" element={<CartPage />} />
+      <Route path="/nature-medica" element={<NatureMedica />} />
+      <Route path="/category/nature-media" element={<NatureMedica />} />
+      <Route path="/category/dry-fruits" element={<DryFruits />} />
 
       <Route
         path="/dashboard"

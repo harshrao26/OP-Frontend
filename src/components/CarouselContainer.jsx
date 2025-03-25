@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
+import buy2 from '../assets/banner/buy2.jpeg';
+import facewash from '../assets/banner/facewash.jpeg';
+import handwash from '../assets/banner/handwash.jpeg';
+import lipbalm from '../assets/banner/lipbalm.jpeg';
+import mouse from '../assets/banner/mouse.jpeg';
+import printed from '../assets/banner/printed.jpeg';
+import ricewater from '../assets/banner/ricewater.jpeg';
+import shila from '../assets/banner/shila.jpeg';
+import tws from '../assets/banner/tws.jpeg';
 const images = [
-  'https://www.orra.co.in/media/wysiwyg/1920_x_700__DF_Banner___Desktop_1_Without_SBI_1.jpg',
-  'https://www.orra.co.in/media/wysiwyg/Astra_Desktop_Banner.jpg',
-  'https://www.orra.co.in/media/wysiwyg/1920_x_700__New_DR_Banner___Desktop_Without_SBI.jpg'
+  buy2,
+  facewash,
+  handwash,
+  lipbalm,
+  mouse,
+  printed,
+  ricewater,
+  shila,
+  tws,
 ];
-
 const CarouselContainer = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -29,10 +42,10 @@ const CarouselContainer = () => {
   }, []);
 
   return (
-    <div className=" relative w-full">
+    <div className=" relative w-full overflow-hidden px-40">
       <div className="overflow-hidden w-full">
         <div
-          className="flex transition-transform duration-500"
+          className="flex transition-transform duration-500 "
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {images.map((image, index) => (

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, ShoppingCart, Store, LogOut, Menu, X } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-
+import logo from "../assets/logoo.png";
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { cart } = useCart();
@@ -21,7 +21,7 @@ const Navbar = () => {
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
-          Online Planet
+          <img src={logo} alt="" className="h-12" />
         </Link>
 
         {/* Search Bar - Hidden on Small Screens */}
