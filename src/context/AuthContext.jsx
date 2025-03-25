@@ -2,7 +2,7 @@ import axios from "axios";
 import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = "http://localhost:5001/api/customer/auth"; // Backend Auth URL
+const API_BASE_URL = "http://localhost:5001/api"; // Base URL
 
 const AuthContext = createContext();
 
@@ -13,27 +13,38 @@ export const AuthProvider = ({ children }) => {
   // Load user from localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const storedRole = localStorage.getItem("role");
+
+    // if (storedUser && storedRole) {
+    //   setUser({ ...JSON.parse(storedUser), role: storedRole });
+    // }
   }, []);
 
-  // 🔹 Login Function
-  const login = async (email, password) => {
-    console.log("🟡 Logging in user..."); // Step 1: Start login
+  // 🔹 Login Function (Handles Multiple Roles)
+  const login = async (email, password, role) => {
+    console.log(`🟡 Logging in as ${role}...`); // Debugging
+
+    const endpoint = `${API_BASE_URL}/${role}/auth/login`;
+
     try {
-      const { data } = await axios.post(`${API_BASE_URL}/login`, { email, password });
+      const { data } = await axios.post(endpoint, { email, password });
 
-      console.log("🟢 Login Successful!", data); // Step 2: Check API response
+      console.log(`🟢 ${role.toUpperCase()} Login Successful!`, data);
 
-      // Store user data
+      // Store user data in localStorage
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.customer));
+      localStorage.setItem("user", JSON.stringify(data.user)); // Adjust based on backend response
+      localStorage.setItem("role", role);
 
-      setUser(data.customer);
-      navigate("/");
+      setUser({ ...data.user, role });
+      
+      // Redirect based on role
+      if (role === "seller") navigate("/seller/dashboard");
+      else if (role === "admin") navigate("/admin/dashboard");
+      else navigate("/");
+      
     } catch (error) {
-      console.error("🔴 Login failed:", error.response?.data || error.message);
+      console.error(`🔴 ${role.toUpperCase()} Login failed:`, error.response?.data || error.message);
     }
   };
 
@@ -42,6 +53,7 @@ export const AuthProvider = ({ children }) => {
     console.log("🟠 Logging out...");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
     setUser(null);
     navigate("/");
   };

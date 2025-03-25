@@ -5,4 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(),     tailwindcss()  ],
+  optimizeDeps: {
+    include: ["draft-js", "react-draft-wysiwyg", "draftjs-to-html"]
+  },
+  define: {
+    global: 'window', // Define `global` as `window`
+  },
+
 })

@@ -13,7 +13,7 @@ import Gender from "../components/Gender.jsx";
 import DeliveryMarquee from '../components/DeliveryMarquee.jsx'
 const Home = () => {
   return (
-    <div>
+    <div className='pt-20'>
       <DeliveryMarquee />
             <Details />
 

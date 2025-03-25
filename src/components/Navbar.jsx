@@ -17,7 +17,7 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <nav className="bg-white shadow-md px-6 py-3">
+    <nav className="bg-white shadow-md px-6 py-3  w-full z-200">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
@@ -36,7 +36,7 @@ const Navbar = () => {
 
         {/* Right Section */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/seller" className="flex items-center space-x-1">
+          <Link to="/seller-login" className="flex items-center space-x-1">
             <Store className="w-5 h-5 text-gray-700" />
             <span className="text-gray-700">Become a Seller</span>
           </Link>
@@ -54,9 +54,10 @@ const Navbar = () => {
           {/* User Section */}
           {user ? (
             <div className="flex items-center space-x-2">
-              <span className="text-gray-700 whitespace-nowrap">
+             { console.log(user)}
+              {/* <span className="text-gray-700 whitespace-nowrap">
                 👋 {user.name.trim()}
-              </span>
+              </span> */}
               <LogOut
                 className="w-5 h-5 text-red-500 cursor-pointer"
                 onClick={logout}
@@ -95,7 +96,7 @@ const Navbar = () => {
 
           {user ? (
             <div className="flex items-center space-x-2">
-              <span className="text-gray-700">👋 {user.name.trim()}</span>
+              {/* <span className="text-gray-700">👋 {user.name.trim()}</span> */}
               <LogOut
                 className="w-5 h-5 text-red-500 cursor-pointer"
                 onClick={logout}
