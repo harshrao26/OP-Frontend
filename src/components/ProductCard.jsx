@@ -21,7 +21,11 @@ const ProductCard = ({ id, image, name, description, price }) => {
       <img src={image} alt={name} className="w-full h-48 object-cover rounded-md" />
       <div className="mt-4">
         <h3 className="text-lg font-semibold text-gray-700 truncate">{name}</h3>
-        <p className="text-gray-500 text-sm mt-1 truncate">{description}</p>
+        {/* Render the HTML description with truncation */}
+        <div
+          className="text-gray-500 text-sm mt-1 overflow-hidden line-clamp-2"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
         <div className="flex justify-between items-center mt-3">
           <div>
             <span className="text-green-600 font-bold text-lg">₹{price}</span>

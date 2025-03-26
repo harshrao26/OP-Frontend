@@ -1,9 +1,11 @@
 import React from 'react'
-
+import AddProduct from './AddProducts'
+import SeeAllProducts from './SeeAllProducts'
 const SellerDashboard = () => {
   return (
     <div>
-      Seller
+      <AddProduct />
+      <SeeAllProducts />
     </div>
   )
 }

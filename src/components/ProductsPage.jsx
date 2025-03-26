@@ -20,7 +20,6 @@ const ProductsPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">All Products</h2>
-
       {products.length === 0 ? (
         <p className="text-gray-500 text-center">Loading products...</p>
       ) : (
@@ -29,7 +28,11 @@ const ProductsPage = () => {
             <ProductCard
               key={product._id}
               id={product._id}
-              image={product.image}
+              image={
+                product.images && product.images.length > 0 
+                  ? product.images[0] 
+                  : product.image
+              }
               name={product.name}
               description={product.description}
               price={product.price}
