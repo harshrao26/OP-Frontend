@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", data.token);
       // Store user using our hook via setUser (which automatically writes to localStorage)
       setUser({ ...data.user, role });
+      console.log(user);
       // Redirect based on role
       if (role === "seller") navigate("/seller/dashboard");
       else if (role === "admin") navigate("/admin/dashboard");

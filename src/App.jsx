@@ -19,6 +19,8 @@ import Bags from "./components/Bags.jsx";
 import SellerLogin from "./components/seller/SellerLogin.jsx";
 import SellerDashboard from "./components/seller/SellerDashboard.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
+import AdminLogin from "./pages/AdminLogin.jsx";
+import SellerRegister from "./pages/SellerRegister.jsx";
 export default function App() {
   const { user } = useAuth() || {}; // ✅ Ensure `user` is always defined
 
@@ -27,6 +29,9 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/seller/login" element={<SellerLogin/>} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/seller-register" element={<SellerRegister />} />
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<CartPage />} />
