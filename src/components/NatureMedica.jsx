@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard"; // adjust path based on your structure
+import Filters from './Filters'
 
 const NatureMedicaProducts = () => {
   const [products, setProducts] = useState([]);
@@ -24,9 +25,10 @@ const NatureMedicaProducts = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Nature Medica Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className=" w-full">
+      
+      <Filters className="" />
+      <div className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard
             key={product._id}
