@@ -8,7 +8,7 @@ const ProductsPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5001/api/customer/products/all");
+        const { data } = await axios.get("https://op-backend-lgam.onrender.com/api/customer/products/all");
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);

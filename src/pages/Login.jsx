@@ -4,7 +4,7 @@ import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5001/api";
+const API_BASE_URL = "https://op-backend-lgam.onrender.com/api";
 
 const CustomerAuth = () => {
   const { login } = useAuth();

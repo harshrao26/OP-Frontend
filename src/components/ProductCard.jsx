@@ -18,7 +18,7 @@ const ProductCard = ({ id, image, name, description, price }) => {
       className="bg-white rounded-lg shadow-md p-4 border border-gray-200 transition-transform hover:scale-105 cursor-pointer"
       onClick={handleClick}
     >
-      <img src={image} alt={name} className="w-full h-48 object-cover rounded-md" />
+      <img src={image} alt={name} className="w-full h-60 object-cover rounded-md" />
       <div className="mt-4">
         <h3 className="text-lg font-semibold text-gray-700 truncate">{name}</h3>
         {/* Render the HTML description with truncation */}

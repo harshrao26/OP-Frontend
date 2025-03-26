@@ -13,7 +13,7 @@ import Gender from "../components/Gender.jsx";
 import DeliveryMarquee from '../components/DeliveryMarquee.jsx'
 const Home = () => {
   return (
-    <div className='pt-20'>
+    <div className=''>
       <DeliveryMarquee />
             <Details />
 
@@ -24,7 +24,7 @@ const Home = () => {
       <LastChanceOffer />
 
       <CarouselContainer />
-      <SuggestedForYou />
+      {/* <SuggestedForYou /> */}
 
       <ProductsPage />
       <Banner3 />

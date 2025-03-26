@@ -1,9 +1,9 @@
 import axios from "axios";
 import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthStorage from "./useAuthStorage"; // adjust the path as needed
+import useAuthStorage from "./useAuthStorage";
 
-const API_BASE_URL = "http://localhost:5001/api";
+const API_BASE_URL = "https://op-backend-lgam.onrender.com/api";
 
 const AuthContext = createContext();
 
@@ -15,10 +15,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await axios.post(`${API_BASE_URL}/${role}/auth/login`, { email, password });
       localStorage.setItem("token", data.token);
-      // Store user using our hook via setUser (which automatically writes to localStorage)
-      setUser({ ...data.user, role });
-      console.log(user);
-      // Redirect based on role
+      // Use the 'customer' field from the backend response
+      setUser({ ...data.customer, role });
+      console.log("Logged-in user:", data.customer);
+
       if (role === "seller") navigate("/seller/dashboard");
       else if (role === "admin") navigate("/admin/dashboard");
       else navigate("/");

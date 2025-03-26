@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import sofa from '../assets/sofa.png'
+import bags2 from '../assets/bags2.png'
 const products = [
   { id: 2, image: 'https://mixdryfruit.com/cdn/shop/files/Mixed-Dryfruits-nuts.png?v=1721831661&width=990', name: 'Dry Fruits', link: 'category/dry-fruits' },
   { id: 3, image: 'https://png.pngtree.com/png-clipart/20240321/original/pngtree-bottle-medicine-drugs-png-image_14648681.png', name: 'Medicine', link: 'category/medicines' },
   { id: 4, image: 'https://printify.com/wp-content/uploads/2023/10/Unisex-Jersey-Short-Sleeve-Tee-with-design.jpg', name: 'Customized Tshirts', link: 'category/t-shirts' },
-  { id: 5, image: 'https://s3-alpha-sig.figma.com/img/f731/c3e3/b9bcc9239900c51a2108883912eb4b0e?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=...', name: 'Sofa', link: 'category/furniture' },
-  { id: 1, image: 'https://s3-alpha-sig.figma.com/img/2d8f/c8de/f9b3248df63fc8af8b273387c27a2153?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=...', name: 'Bags', link: 'category/bags' },
+  { id: 5, image: sofa, name: 'Sofa', link: 'category/furniture' },
+  { id: 1, image: bags2, name: 'Bags', link: 'category/bags' },
 ];
 
 const Carousel = () => {

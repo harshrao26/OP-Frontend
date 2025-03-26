@@ -70,7 +70,7 @@ function AddProduct() {
     };
 
     try {
-      const res = await fetch('http://localhost:5001/api/seller/products/add', {
+      const res = await fetch('https://op-backend-lgam.onrender.com/api/seller/products/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

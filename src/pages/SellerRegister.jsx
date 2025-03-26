@@ -52,7 +52,7 @@ const SellerRegister = () => {
           linkedin: formData.linkedin,
         },
       };
-      await axios.post("http://localhost:5001/api/seller/auth/register", payload);
+      await axios.post("https://op-backend-lgam.onrender.com/api/seller/auth/register", payload);
       alert("Seller registered successfully!");
     } catch (err) {
       console.error("Registration error:", err.response?.data || err.message);

@@ -14,7 +14,7 @@ export const CartProvider = ({ children }) => {
         if (!token) return;
 
         const { data } = await axios.get(
-          "http://localhost:5001/api/customer/products/cart",
+          "https://op-backend-lgam.onrender.com/api/customer/products/cart",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
       console.log("Updating cart for product:", productId, "with quantity:", quantity);
     
       const response = await axios.post(
-        "http://localhost:5001/api/customer/products/cart/add-product",
+        "https://op-backend-lgam.onrender.com/api/customer/products/cart/add-product",
         { productId, quantity },
         {
           headers: {

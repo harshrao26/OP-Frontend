@@ -22,7 +22,7 @@ function AllProducts() {
       setLoading(false);
       return;
     }
-    fetch('http://localhost:5001/api/seller/products/all', {
+    fetch('https://op-backend-lgam.onrender.com/api/seller/products/all', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
@@ -41,7 +41,7 @@ function AllProducts() {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/seller/products/delete/${id}`, {
+      const res = await fetch(`https://op-backend-lgam.onrender.com/api/seller/products/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ function AllProducts() {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5001/api/seller/products/update/${editingProduct._id}`, {
+      const res = await fetch(`https://op-backend-lgam.onrender.com/api/seller/products/update/${editingProduct._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
