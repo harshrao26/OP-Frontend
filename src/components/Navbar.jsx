@@ -44,7 +44,7 @@ const Navbar = () => {
   }, [searchQuery]);
 
   return (
-    <nav className="bg-white shadow-md px-6 py-3 w-full z-200">
+    <nav className="bg-white shadow-md md:px-6 px-2 py-3 w-full z-200  ">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
@@ -52,7 +52,7 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar - Hidden on Small Screens */}
-        <div className="hidden md:block relative w-1/3">
+        <div className="md:w-full w-60  relative ">
           <div className="flex items-center bg-gray-100 px-3 py-2 rounded-md">
             <Search className="w-5 h-5 text-gray-500" />
             <input
