@@ -21,6 +21,7 @@ import SellerDashboard from "./components/seller/SellerDashboard.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import SellerRegister from "./pages/SellerRegister.jsx";
+import CheckOut from "./pages/CheckOut.jsx";
 export default function App() {
   const { user } = useAuth() || {}; // ✅ Ensure `user` is always defined
 
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/category/bags" element={<Bags />} />
         <Route path="/seller-login" element={<SellerLogin />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/checkout" element={<CheckOut />} />
 
        
         {/* Protected Routes for Sellers */}

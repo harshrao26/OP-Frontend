@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 const CartPage = () => {
@@ -48,9 +49,11 @@ const CartPage = () => {
             <div className="flex justify-between text-gray-600 mb-2"><span>GST (18%)</span><span>₹{gst}</span></div>
             <hr className="my-4" />
             <div className="flex justify-between font-bold text-lg text-gray-800"><span>Total</span><span>₹{total}</span></div>
-            <button className="mt-6 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">
+           <div className="mt-6">
+           <Link to='/checkout' className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
               Proceed to Checkout
-            </button>
+            </Link>
+           </div>
           </div>
         </div>
       )}

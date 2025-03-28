@@ -10,12 +10,18 @@ import {
   Lock,
 } from "lucide-react";
 import logo from '../assets/logoo.png'
+import shop from '../assets/login/shop.png'
+import shop2 from '../assets/login/shop2.png'
+import shop3 from '../assets/login/shop3.png'
 
 const API_BASE_URL = "https://op-backend-lgam.onrender.com/api";
 
 // Simple regex patterns
 const phoneRegex = /^[0-9]{10}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+
 
 const CustomerAuth = () => {
   const { login } = useAuth();
@@ -107,9 +113,10 @@ const CustomerAuth = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col-reverse lg:flex-row m-20 rounded-4xl ">
+    <div className="min-h-screen flex flex-col-reverse lg:flex-row  rounded-4xl ">
       {/* Left: Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 py-10 bg-white shadow-2xl rounded-4xl">
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-12 bg-white">
+        <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800"></h1>
           <img src={logo} alt="" />
@@ -272,10 +279,14 @@ const CustomerAuth = () => {
             Seller Login
           </Link>
         </div>
+        </div>
       </div>
 
       {/* Right: Illustration / branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-blue-600 text-white flex-col items-center justify-center p-8">
+       
+       
+       
         <h2 className="text-3xl font-bold mb-4">Connect with every application</h2>
         <p className="text-lg max-w-sm text-center">
           Everything you need in an easily customizable dashboard.

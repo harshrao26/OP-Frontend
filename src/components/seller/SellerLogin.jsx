@@ -13,39 +13,67 @@ const SellerLogin = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-6">
-        <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">Seller Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-green-300 outline-none"
-            />
+    <div className="flex min-h-screen">
+      {/* Left Side: Login Form */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-12 bg-white">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-2xl font-bold mb-2">Log in to your Account</h2>
+          <p className="text-gray-600 mb-6">Welcome back! Select method to log in:</p>
+    
+          {/* Email/Password Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                className="mt-1 w-full px-3 py-2 border rounded focus:ring focus:ring-blue-300 outline-none"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <input
+                type="password"
+                className="mt-1 w-full px-3 py-2 border rounded focus:ring focus:ring-blue-300 outline-none"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="flex items-center text-sm">
+                <input type="checkbox" className="mr-2" />
+                Remember me
+              </label>
+              <a href="#" className="text-sm text-blue-600 hover:underline">
+                Forgot Password?
+              </a>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center gap-2 hover:bg-blue-700"
+            >
+              <LogIn size={18} />
+              Login
+            </button>
+          </form>
+       
+        </div>
+      </div>
+      {/* Right Side: Illustration/Info */}
+      <div className="hidden md:flex md:w-1/2 bg-blue-600 items-center justify-center p-8">
+        <div className="text-white max-w-sm">
+          <h2 className="text-2xl font-bold mb-4">Connect with every application</h2>
+          <p className="mb-6">Everything you need in an easily customizable dashboard.</p>
+          {/* Replace with your illustration or icons */}
+          <div className="rounded-full bg-white bg-opacity-20 p-6">
+            <img src="/dashboard-mockup.svg" alt="Dashboard Mockup"  className=""/>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-green-300 outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg flex items-center justify-center gap-2"
-          >
-            <LogIn size={18} /> Login
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   );
