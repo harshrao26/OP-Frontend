@@ -4,9 +4,13 @@ import axios from "axios";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  // Initialize cart from localStorage if available
+  const [cart, setCart] = useState(() => {
+    const localCart = localStorage.getItem("cart");
+    return localCart ? JSON.parse(localCart) : [];
+  });
 
-  // Load cart from backend on page load
+  // Load cart from backend on page load (if token exists)
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -20,7 +24,7 @@ export const CartProvider = ({ children }) => {
           }
         );
 
-        console.log("Fetched cart data:", data.cartItems); // Debugging
+        console.log("Fetched cart data:", data.cartItems);
         setCart(data.cartItems || []);
       } catch (error) {
         console.error("Error fetching cart:", error);
@@ -30,7 +34,11 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, []);
 
-  // In CartContext
+  // Persist cart changes to localStorage
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const updateCartInBackend = async (productId, quantity) => {
     try {
       const token = localStorage.getItem("token");
@@ -57,7 +65,6 @@ export const CartProvider = ({ children }) => {
       console.error("Error updating cart in backend:", error.response?.data || error);
     }
   };
-  
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -79,7 +86,7 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Increase quantity (Respect stock limits)
+  // Increase quantity (respecting stock limits)
   const increaseQuantity = (productId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.map((item) =>
@@ -87,12 +94,13 @@ export const CartProvider = ({ children }) => {
           ? { ...item, quantity: item.quantity + 1 }
           : item
       );
-      updateCartInBackend(updatedCart); // 🛠 Ensure update is called
+      const updatedItem = updatedCart.find((item) => item.id === productId);
+      if (updatedItem) updateCartInBackend(productId, updatedItem.quantity);
       return updatedCart;
     });
   };
 
-  // Decrease quantity (Remove if 0)
+  // Decrease quantity (removing item if quantity falls to 0)
   const decreaseQuantity = (productId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart
@@ -103,7 +111,12 @@ export const CartProvider = ({ children }) => {
         )
         .filter((item) => item.quantity > 0);
 
-      updateCartInBackend(updatedCart); // 🛠 Ensure update is called
+      const updatedItem = updatedCart.find((item) => item.id === productId);
+      if (updatedItem) {
+        updateCartInBackend(productId, updatedItem.quantity);
+      } else {
+        updateCartInBackend(productId, 0);
+      }
       return updatedCart;
     });
   };

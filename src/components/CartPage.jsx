@@ -11,6 +11,9 @@ const CartPage = () => {
   const gst = (subtotal * 0.18).toFixed(2);
   const total = (subtotal + platformFee + deliveryCharge + parseFloat(gst)).toFixed(2);
 
+  // Check if user is logged in by looking for a token
+  const isLoggedIn = !!localStorage.getItem("token");
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Your Cart</h2>
@@ -49,11 +52,17 @@ const CartPage = () => {
             <div className="flex justify-between text-gray-600 mb-2"><span>GST (18%)</span><span>₹{gst}</span></div>
             <hr className="my-4" />
             <div className="flex justify-between font-bold text-lg text-gray-800"><span>Total</span><span>₹{total}</span></div>
-           <div className="mt-6">
-           <Link to='/checkout' className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
-              Proceed to Checkout
-            </Link>
-           </div>
+            <div className="mt-6">
+              {isLoggedIn ? (
+                <Link to='/checkout' className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 text-center">
+                  Proceed to Checkout
+                </Link>
+              ) : (
+                <Link to='/login' className="w-full bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 text-center">
+                  Please Log In to Checkout
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}

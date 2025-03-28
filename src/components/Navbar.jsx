@@ -54,17 +54,21 @@ const Navbar = () => {
           {/* User Section */}
           {user ? (
             <div className="flex items-center space-x-2">
-             { console.log(user)}
-              {/* <span className="text-gray-700 whitespace-nowrap">
-                👋 {user.name.trim()}
-              </span> */}
+              {console.log(user)}
+              <span className="text-gray-700 whitespace-nowrap capitalize">
+                👋 {user.name.trim().split(" ")[0]}
+              </span>
+
               <LogOut
-                className="w-5 h-5 text-red-500 cursor-pointer"
+                className="w-8 h-8 p-2 bg-red-500 rounded-full text-white  cursor-pointer"
                 onClick={logout}
               />
             </div>
           ) : (
-            <Link to="/login" className="bg-blue-500 text-white px-4 py-2 rounded-md">
+            <Link
+              to="/login"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
               Login
             </Link>
           )}
@@ -94,6 +98,14 @@ const Navbar = () => {
             )}
           </Link>
 
+          {user && (
+            <div className="flex items-center space-x-2">
+              <span className="text-gray-700 whitespace-nowrap">
+                {user.name.trim()}
+              </span>
+            </div>
+          )}
+
           {user ? (
             <div className="flex items-center space-x-2">
               {/* <span className="text-gray-700">👋 {user.name.trim()}</span> */}
@@ -103,7 +115,10 @@ const Navbar = () => {
               />
             </div>
           ) : (
-            <Link to="/login" className="bg-blue-500 text-white px-4 py-2 rounded-md">
+            <Link
+              to="/login"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
               Login
             </Link>
           )}

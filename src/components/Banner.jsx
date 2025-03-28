@@ -1,11 +1,25 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // Import Lucide Icons
+import bags from '../assets/product specfic banner/bags.png'
+import cake from '../assets/product specfic banner/cake.png'
+import elec from '../assets/product specfic banner/elec.png'
+import home from '../assets/product specfic banner/home.png'
+import meds from '../assets/product specfic banner/meds.png'
+import nm from '../assets/product specfic banner/nm.png'
+import ts from '../assets/product specfic banner/ts.png'
+import datsbanner from '../assets/product specfic banner/datesbanner.jpeg'
+
 
 const images = [
-  "https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/97efc7d91de0ad4d.jpg?q=20",
-  "https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/723ccd08c52125fa.jpeg?q=20",
-  "https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/a354077c3747d8f6.png?q=20",
-  "https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/57d9b129e302642e.jpg?q=20"
+  bags,
+  datsbanner,
+  cake,
+  elec,
+  home,
+  meds,
+  nm,
+  ts,
+ 
 ];
 
 const BannerCarousel = () => {
@@ -48,6 +62,7 @@ const BannerCarousel = () => {
         alt={`Banner ${current + 1}`}
         className="w-full h-auto object-cover shadow-lg"
       />
+      
 
       {/* Prev Button */}
       {/* <button

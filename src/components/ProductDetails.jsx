@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
+import toast from "react-hot-toast";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -44,6 +45,20 @@ const ProductDetails = () => {
   const cartItem = cart.find(item => item.id === product._id);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
 
+  const handleAddToCart = () => {
+    addToCart({
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      image: mainImage,
+      stock: product.stock,
+    });
+    toast.success('Item added to cart', {
+      position: 'top-right',
+      style: { background: '#333', color: '#fff' },
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-10">
       {/* Product Detail Section */}
@@ -72,7 +87,7 @@ const ProductDetails = () => {
                   key={idx}
                   src={img}
                   alt={`thumbnail-${idx}`}
-                  className={`w-20  object-cover rounded cursor-pointer border ${
+                  className={`w-20 object-cover rounded cursor-pointer border ${
                     mainImage === img ? "border-blue-500" : "border-gray-300"
                   }`}
                   onClick={() => setMainImage(img)}
@@ -94,15 +109,7 @@ const ProductDetails = () => {
           {/* Add to Cart / Quantity Controls */}
           {quantityInCart === 0 ? (
             <button
-              onClick={() =>
-                addToCart({
-                  id: product._id,
-                  name: product.name,
-                  price: product.price,
-                  image: mainImage,
-                  stock: product.stock,
-                })
-              }
+              onClick={handleAddToCart}
               className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded-md"
             >
               Add to Cart

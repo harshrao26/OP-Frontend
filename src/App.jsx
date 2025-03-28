@@ -22,6 +22,7 @@ import { useAuth } from "./context/AuthContext.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import SellerRegister from "./pages/SellerRegister.jsx";
 import CheckOut from "./pages/CheckOut.jsx";
+import Results from "./pages/Results.jsx";
 export default function App() {
   const { user } = useAuth() || {}; // ✅ Ensure `user` is always defined
 
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="/seller-login" element={<SellerLogin />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/results" element={<Results />} />
 
        
         {/* Protected Routes for Sellers */}

@@ -133,9 +133,27 @@ function AddProduct() {
           <input type="number" name="stock" value={product.stock} onChange={handleInputChange} className="w-full border rounded px-3 py-2" required />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Brand</label>
-          <input type="text" name="brand" value={product.brand} onChange={handleInputChange} className="w-full border rounded px-3 py-2" required />
-        </div>
+  <label className="block text-gray-700">Brand</label>
+  <select
+    name="brand"
+    value={product.brand}
+    onChange={handleInputChange}
+    className="w-full border rounded px-3 py-2"
+    required
+  >
+    <option value="">Select a Brand</option>
+    <option value="Nature Media">Nature Media</option>
+    <option value="Dry Fruits">Dry Fruits</option>
+    <option value="Cake">Cake</option>
+    <option value="Electronics">Electronics</option>
+    <option value="T-Shirts">T-Shirts</option>
+    <option value="Medicines">Medicines</option>
+    <option value="Home Essentials">Home Essentials</option>
+    <option value="Furniture">Furniture</option>
+    <option value="Bag">Bag</option>
+  </select>
+</div>
+
         {/* File upload */}
         <div className="mb-4">
           <label className="block text-gray-700">Upload Images</label>
