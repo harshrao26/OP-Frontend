@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/admin/ProtectedRoute.jsx";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -19,10 +19,12 @@ import Bags from "./components/Bags.jsx";
 import SellerLogin from "./components/seller/SellerLogin.jsx";
 import SellerDashboard from "./components/seller/SellerDashboard.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
-import AdminLogin from "./pages/AdminLogin.jsx";
 import SellerRegister from "./pages/SellerRegister.jsx";
 import CheckOut from "./pages/CheckOut.jsx";
 import Results from "./pages/Results.jsx";
+import AdminDashboard from "./components/admin/AdminDashboard.jsx";
+import AdminRegister from "./components/admin/AdminRegister.jsx";
+import AdminLogin from "./components/admin/AdminLogin.jsx";
 export default function App() {
   const { user } = useAuth() || {}; // ✅ Ensure `user` is always defined
 
@@ -31,7 +33,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/seller/login" element={<SellerLogin/>} />
+        <Route path="/seller/login" element={<SellerLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/seller-register" element={<SellerRegister />} />
         <Route path="/" element={<Home />} />
@@ -52,19 +54,32 @@ export default function App() {
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/results" element={<Results />} />
 
-       
         {/* Protected Routes for Sellers */}
         <Route
           path="/seller/dashboard"
-          element={user?.role === "seller" ? <SellerDashboard /> : <Navigate to="/login" />}
+          element={
+            user?.role === "seller" ? (
+              <SellerDashboard />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
 
         {/* Protected Routes for Admin */}
         <Route
           path="/admin/dashboard"
-          element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/login" />}
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
         />
+
+        <Route to="/admin/register" element={<AdminRegister />} />
+        <Route to="admin/login" element={<AdminLogin />} />
       </Routes>
+
       <Footer />
     </>
   );

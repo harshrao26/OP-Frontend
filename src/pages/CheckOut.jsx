@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { CreditCard, QrCode, DollarSign } from 'lucide-react';
-import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import banner1 from '../assets/banner/buy2.jpeg';
 import banner2 from '../assets/banner/tws.jpeg';
@@ -12,7 +12,7 @@ const Carousel = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
+      setCurrent(prev => (prev + 1) % images.length);
     }, 3000);
     return () => clearInterval(timer);
   }, [images.length]);
@@ -32,6 +32,7 @@ const Carousel = () => {
 };
 
 const CheckoutPage = () => {
+  const { cart, clearCart } = useCart();
   const [shipping, setShipping] = useState({
     name: '',
     address: '',
@@ -41,6 +42,8 @@ const CheckoutPage = () => {
   });
   const [upiId, setUpiId] = useState('');
   const [selectedPayment, setSelectedPayment] = useState('razorpay');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
@@ -49,36 +52,62 @@ const CheckoutPage = () => {
 
   const isLucknow = shipping.city.trim().toLowerCase() === 'lucknow';
 
-  const { cart, decreaseQuantity, increaseQuantity, removeFromCart } = useCart();
-
-  // Calculate pricing details
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const platformFee = 50;
   const deliveryCharge = subtotal > 500 ? 0 : 40;
-  const gst = (subtotal * 0.18).toFixed(2);
-  const total = (subtotal + platformFee + deliveryCharge + parseFloat(gst)).toFixed(2);
+  const gst = parseFloat((subtotal * 0.18).toFixed(2));
+  const total = parseFloat((subtotal + platformFee + deliveryCharge + gst).toFixed(2));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isLucknow) {
-      alert('Shipping is available only in Lucknow.');
+      alert("Shipping is available only in Lucknow.");
       return;
     }
-    console.log('Order submitted', { shipping, selectedPayment, upiId });
-    // Add your Razorpay integration or other payment logic here.
+    setLoading(true);
+    const payload = {
+      products: cart.map(item => ({
+        productId: item.id,
+        quantity: item.quantity
+      })),
+      shipping,
+      payment: selectedPayment,
+      upiId: selectedPayment === 'upi' ? upiId : undefined
+    };
+  
+    const token = localStorage.getItem("token");
+  
+    try {
+      const response = await axios.post("https://op-backend-lgam.onrender.com/api/customer/products/purchase", payload, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      console.log("API Response:", response.data);
+      setMessage("Purchase successful!");
+      // Safeguard clearCart: ensure it's a function before calling it.
+      if (clearCart && typeof clearCart === 'function') {
+        clearCart();
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      setMessage(error.response?.data?.message || "Purchase failed!");
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      {/* Promotional Carousel */}
       <Carousel />
-
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        {message && <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">{message}</div>}
         <div className="flex flex-col md:flex-row gap-6">
           {/* Checkout Form */}
           <div className="md:w-2/3">
             <form onSubmit={handleSubmit}>
-              {/* Shipping Information */}
               <section className="mb-6">
                 <h3 className="text-xl font-semibold mb-4">Shipping Information</h3>
                 <div className="mb-4">
@@ -200,9 +229,10 @@ const CheckoutPage = () => {
 
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
               >
-                Place Order
+                {loading ? "Processing..." : "Place Order"}
               </button>
             </form>
           </div>
