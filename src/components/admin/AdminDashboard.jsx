@@ -12,6 +12,8 @@ import {
 } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+const token = localStorage.getItem("adminToken");
+
 
 // Sidebar Component
 const Sidebar = ({ activeTab, setActiveTab }) => (
@@ -61,17 +63,26 @@ const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
   const handleApprove = async (e) => {
     e.stopPropagation();
     try {
-      await axios.put(`https://op-backend-lgam.onrender.com/api/admin/sellers/${seller._id}/approve`);
+      await axios.put(
+        `https://op-backend-lgam.onrender.com/api/admin/sellers/${seller._id}/approve`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       onStatusChange("Approved");
     } catch (error) {
       console.error("Error approving seller", error);
     }
   };
 
+
   const handleDisable = async (e) => {
     e.stopPropagation();
     try {
-      await axios.put(`https://op-backend-lgam.onrender.com/api/admin/sellers/${seller._id}/disabled`);
+      await axios.put(
+        `https://op-backend-lgam.onrender.com/api/admin/sellers/${seller._id}/disabled`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       onStatusChange("Disabled");
     } catch (error) {
       console.error("Error disabling seller", error);
@@ -97,7 +108,7 @@ const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
             <p><strong>GST Number:</strong> {seller.gstNumber}</p>
             <p><strong>Years in Business:</strong> {seller.yearsInBusiness}</p>
             <p><strong>Rating:</strong> {seller.averageRating}</p>
-            <p><strong>Account Status:</strong> {seller.accountStatus}</p>
+            <p><strong>Account Status:</strong> <span className="text-green-500 font-semibold text-xl">{seller.accountStatus}</span></p>
             <p><strong>Pending Balance:</strong> {seller.pendingBalance}</p>
             <p><strong>Amount Paid:</strong> {seller.amountPaidByAdmin}</p>
             <p><strong>Orders Shipped:</strong> {seller.ordersShipped}</p>
@@ -219,6 +230,7 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [message, setMessage] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
+  
 
   useEffect(() => {
     const fetchDashboard = async () => {
