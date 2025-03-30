@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
+import ProductCard from "./ProductCard";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,6 +13,19 @@ const ProductDetails = () => {
   const [suggested, setSuggested] = useState([]);
 
   useEffect(() => {
+
+
+      // Ensure scrolling to the top of the document when the component is mounted
+      window.scrollTo({
+        top: 0,
+        behavior: "auto", // You can use "auto" for instant scroll
+      });
+  
+      // As a fallback, scroll the root element
+      document.documentElement.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(`https://op-backend-lgam.onrender.com/api/customer/products/${id}`);
@@ -62,7 +76,7 @@ const ProductDetails = () => {
   return (
     <div className="container mx-auto px-4 py-10">
       {/* Product Detail Section */}
-      <div className="flex flex-col md:flex-row gap-10">
+      <div className="flex flex-col md:flex-row gap-10 min-h-screen">
         {/* Left Image Section */}
         <div className="w-full md:w-1/3">
           <div className="bg-gray-100 rounded-lg overflow-hidden">
@@ -102,35 +116,41 @@ const ProductDetails = () => {
           <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
           <p className="text-green-600 font-semibold text-2xl mt-2">₹{product.price}</p>
 
-          {product.stock < 10 && (
+          {product.stock < 10 && product.stock > 0 && (
             <p className="text-red-500 mt-2">Only a few left in stock!</p>
           )}
 
           {/* Add to Cart / Quantity Controls */}
-          {quantityInCart === 0 ? (
-            <button
-              onClick={handleAddToCart}
-              className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded-md"
-            >
-              Add to Cart
-            </button>
-          ) : (
-            <div className="flex items-center mt-6">
-              <button
-                onClick={() => decreaseQuantity(product._id)}
-                className="bg-gray-300 text-black px-4 py-2 rounded-l-md hover:bg-gray-400"
-              >
-                -
-              </button>
-              <span className="px-4 py-2 border">{quantityInCart}</span>
-              <button
-                onClick={() => increaseQuantity(product._id)}
-                disabled={quantityInCart >= product.stock}
-                className="bg-gray-300 text-black px-4 py-2 rounded-r-md hover:bg-gray-400 disabled:opacity-50"
-              >
-                +
-              </button>
+          {product.stock <= 0 ? (
+            <div className="mt-4 text-red-500 font-semibold">
+              Out of Stock
             </div>
+          ) : (
+            quantityInCart === 0 ? (
+              <button
+                onClick={handleAddToCart}
+                className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded-md"
+              >
+                Add to Cart
+              </button>
+            ) : (
+              <div className="flex items-center mt-6">
+                <button
+                  onClick={() => decreaseQuantity(product._id)}
+                  className="bg-gray-300 text-black px-4 py-2 rounded-l-md hover:bg-gray-400"
+                >
+                  -
+                </button>
+                <span className="px-4 py-2 border">{quantityInCart}</span>
+                <button
+                  onClick={() => increaseQuantity(product._id)}
+                  disabled={quantityInCart >= product.stock}
+                  className="bg-gray-300 text-black px-4 py-2 rounded-r-md hover:bg-gray-400 disabled:opacity-50"
+                >
+                  +
+                </button>
+              </div>
+            )
           )}
 
           {/* Description */}
@@ -144,24 +164,25 @@ const ProductDetails = () => {
       {/* Suggested Products */}
       <div className="mt-16">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">You may also like</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {suggested.map((item) => (
-            <div
-              key={item._id}
-              className="border border-zinc-300 rounded-md p-3 hover:shadow-lg transition"
-            >
-              <img
-                src={item.image || item.images?.[0]}
-                alt={item.name}
-                className="w-full h-40 object-cover rounded"
-              />
-              <h3 className="text-sm font-medium mt-2 truncate">{item.name}</h3>
-              <p className="text-green-600 font-semibold text-sm">₹{item.price}</p>
-            </div>
+      
+
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {suggested.map((product) => (
+            <ProductCard
+              key={product._id}
+              id={product._id}
+              image={
+                product.images && product.images.length > 0 
+                  ? product.images[0] 
+                  : product.image
+              }
+              name={product.name}
+              price={product.price}
+            />
           ))}
         </div>
+        </div>
       </div>
-    </div>
   );
 };
 

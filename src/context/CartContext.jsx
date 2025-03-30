@@ -121,9 +121,16 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // New: Clear the entire cart once purchase is successful
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem("cart");
+    // Optionally, you could also update the backend to clear the cart.
+  };
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, increaseQuantity, decreaseQuantity }}
+      value={{ cart, addToCart, increaseQuantity, decreaseQuantity, clearCart }}
     >
       {children}
     </CartContext.Provider>
