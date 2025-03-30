@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import {
   Store,
   Mail,
@@ -26,7 +27,7 @@ const SellerRegister = () => {
     sellerAddress: "",
     shopWebsite: "",
     gstNumber: "",
-    idProof: "", // will hold Cloudinary URL after upload
+    idProof: "",
     facebook: "",
     instagram: "",
     twitter: "",
@@ -36,6 +37,7 @@ const SellerRegister = () => {
   });
   const [idProofFile, setIdProofFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,13 +70,13 @@ const SellerRegister = () => {
       const fileData = await res.json();
       if (fileData.secure_url) {
         setFormData((prev) => ({ ...prev, idProof: fileData.secure_url }));
-        alert("File uploaded successfully!");
+        toast.success("File uploaded successfully!");
       } else {
-        alert("Failed to upload file");
+        toast.error("Failed to upload file");
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Error uploading file");
+      toast.error("Error uploading file");
     } finally {
       setUploading(false);
     }
@@ -82,6 +84,7 @@ const SellerRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const payload = {
         ...formData,
@@ -96,14 +99,18 @@ const SellerRegister = () => {
         "https://op-backend-lgam.onrender.com/api/seller/auth/register",
         payload
       );
-      alert("Seller registered successfully!");
+      toast.success("Seller registered successfully!");
     } catch (err) {
       console.error("Registration error:", err.response?.data || err.message);
+      toast.error(err.response?.data?.message || "Registration error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <Toaster />
       <div className="w-full max-w-3xl bg-white shadow-md rounded-2xl p-8">
         <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800 flex items-center justify-center gap-2">
           <Store /> Seller Registration
@@ -118,11 +125,11 @@ const SellerRegister = () => {
           <Input label="Seller Address" icon={<MapPin />} name="sellerAddress" value={formData.sellerAddress} onChange={handleChange} required />
           <Input label="GST Number" icon={<BadgePercent />} name="gstNumber" value={formData.gstNumber} onChange={handleChange} required />
 
-          {/* Custom ID Proof Upload */}
+          {/* ID Proof Upload */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">ID Proof</label>
             <div className="flex items-center gap-2">
-              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <input type="file" accept="image/*" onChange={handleFileChange} required />
               {idProofFile && (
                 <div className="relative">
                   <img
@@ -162,14 +169,33 @@ const SellerRegister = () => {
           <Input label="Instagram" icon={<Globe />} name="instagram" value={formData.instagram} onChange={handleChange} />
           <Input label="Twitter" icon={<Globe />} name="twitter" value={formData.twitter} onChange={handleChange} />
           <Input label="LinkedIn" icon={<Globe />} name="linkedin" value={formData.linkedin} onChange={handleChange} />
-          
+
           <div className="md:col-span-2">
-            <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg flex items-center justify-center gap-2">
-              <CheckCircle size={18} /> Register Seller
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg flex items-center justify-center gap-2"
+            >
+              {isSubmitting && <span className="loader mr-2"></span>}
+              {isSubmitting ? "Submitting..." : (<><CheckCircle size={18} /> Register Seller</>)}
             </button>
           </div>
         </form>
       </div>
+      <style>{`
+        .loader {
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #3498db;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };

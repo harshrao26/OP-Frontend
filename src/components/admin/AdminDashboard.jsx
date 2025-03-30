@@ -58,7 +58,6 @@ const Overview = ({ data }) => (
 
 // Sellers Component
 const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
-  console.log(seller);
   const handleApprove = async (e) => {
     e.stopPropagation();
     try {
@@ -80,16 +79,30 @@ const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+    <div className="fixed inset-0 bg-[#141414b1] flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded shadow-lg max-w-6xl w-full relative">
         <h2 className="text-2xl font-bold mb-4">Seller Details</h2>
-        <p><strong>Shop Name:</strong> {seller.shopName}</p>
-        <p><strong>Email:</strong> {seller.email}</p>
-        <p><strong>Owner:</strong> {seller.ownerName}</p>
-        <p><strong>Contact:</strong> {seller.contactNo}</p>
-        <p><strong>Address:</strong> {seller.sellerAddress}</p>
-        <p><strong>GST Number:</strong> {seller.gstNumber}</p>
-        <p><strong>Account Status:</strong> {seller.accountStatus}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {seller.idProof && (
+            <div>
+              <img src={seller.idProof} alt="ID Proof" className="rounded w-full h-auto" />
+            </div>
+          )}
+          <div className="space-y-2">
+            <p><strong>Shop Name:</strong> {seller.shopName}</p>
+            <p><strong>Email:</strong> {seller.email}</p>
+            <p><strong>Owner:</strong> {seller.ownerName}</p>
+            <p><strong>Contact:</strong> {seller.contactNo}</p>
+            <p><strong>Address:</strong> {seller.sellerAddress}</p>
+            <p><strong>GST Number:</strong> {seller.gstNumber}</p>
+            <p><strong>Years in Business:</strong> {seller.yearsInBusiness}</p>
+            <p><strong>Rating:</strong> {seller.averageRating}</p>
+            <p><strong>Account Status:</strong> {seller.accountStatus}</p>
+            <p><strong>Pending Balance:</strong> {seller.pendingBalance}</p>
+            <p><strong>Amount Paid:</strong> {seller.amountPaidByAdmin}</p>
+            <p><strong>Orders Shipped:</strong> {seller.ordersShipped}</p>
+          </div>
+        </div>
         <div className="flex space-x-4 mt-4">
           <button
             onClick={handleApprove}
@@ -104,13 +117,14 @@ const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
             Disable
           </button>
         </div>
-        <button onClick={onClose} className="mt-4 text-blue-500">
+        <button onClick={onClose} className="mt-4 text-red-500 absolute right-4 top-0">
           Close
         </button>
       </div>
     </div>
   );
 };
+
 
 const Sellers = ({ sellers }) => {
   const [selectedSeller, setSelectedSeller] = useState(null);
