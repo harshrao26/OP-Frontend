@@ -25,6 +25,7 @@ import Results from "./pages/Results.jsx";
 import AdminDashboard from "./components/admin/AdminDashboard.jsx";
 import AdminRegister from "./components/admin/AdminRegister.jsx";
 import AdminLogin from "./components/admin/AdminLogin.jsx";
+import CustomerProfile from "./components/CustomerProfile.jsx";
 export default function App() {
   const { user } = useAuth() || {}; // ✅ Ensure `user` is always defined
 
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/results" element={<Results />} />
+        <Route path="/profile" element={<CustomerProfile />} />
 
         {/* Protected Routes for Sellers */}
         <Route

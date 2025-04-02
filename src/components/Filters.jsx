@@ -28,7 +28,7 @@ const Filters = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between w-full gap-4">
+    <div className="p-4 hidden bg-gray-100 rounded-lg shadow-md  flex-col md:flex-row items-center justify-between w-full gap-4">
       {/* Filters Header */}
       <div className="flex items-center gap-2">
         <Sliders className="text-gray-700" size={20} />

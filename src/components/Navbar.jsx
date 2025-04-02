@@ -118,6 +118,9 @@ const Navbar = () => {
               <span className="text-gray-700 whitespace-nowrap capitalize">
                 {/* 👋 {user.name.trim().split(" ")[0]} */}
               </span>
+              <Link to='/profile'>
+                Profile
+              </Link>
               <LogOut
                 className="w-8 h-8 p-2 bg-red-500 rounded-full text-white cursor-pointer"
                 onClick={logout}
@@ -159,6 +162,12 @@ const Navbar = () => {
           )}
           {user ? (
             <div className="flex items-center space-x-2">
+
+              <Link to='/profile'>
+                Profile
+              </Link>
+
+
               <LogOut
                 className="w-5 h-5 text-red-500 cursor-pointer"
                 onClick={logout}
