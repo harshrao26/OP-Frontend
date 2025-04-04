@@ -64,7 +64,7 @@ const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
     e.stopPropagation();
     try {
       await axios.put(
-        `https://op-backend-lgam.onrender.com/api/admin/sellers/${seller._id}/approve`,
+        `http://localhost:5001/api/admin/sellers/${seller._id}/approve`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -79,7 +79,7 @@ const SellerDetailsModal = ({ seller, onClose, onStatusChange }) => {
     e.stopPropagation();
     try {
       await axios.put(
-        `https://op-backend-lgam.onrender.com/api/admin/sellers/${seller._id}/disabled`,
+        `http://localhost:5001/api/admin/sellers/${seller._id}/disabled`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -236,7 +236,7 @@ const Dashboard = () => {
     const fetchDashboard = async () => {
       try {
         const token = localStorage.getItem("adminToken");
-        const res = await axios.get("https://op-backend-lgam.onrender.com/api/admin/dashboard", {
+        const res = await axios.get("http://localhost:5001/api/admin/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDashboardData(res.data);
