@@ -92,7 +92,7 @@ const CheckoutPage = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.post("http://localhost:5001/api/customer/products/purchase-order", payload, {
+      const response = await axios.post("https://op-backend-lgam.onrender.com/api/customer/products/purchase-order", payload, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`

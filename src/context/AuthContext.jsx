@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStorage from "./useAuthStorage";
 
-const API_BASE_URL = "http://localhost:5001/api";
+const API_BASE_URL = "https://op-backend-lgam.onrender.com/api";
 
 const AuthContext = createContext();
 

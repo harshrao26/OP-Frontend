@@ -26,7 +26,7 @@ const CustomerDashboard = () => {
           return;
         }
         const { data } = await axios.get(
-          "http://localhost:5001/api/customer/auth/profile",
+          "https://op-backend-lgam.onrender.com/api/customer/auth/profile",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setProfileData(data);

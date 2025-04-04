@@ -20,7 +20,7 @@ const CustomerOrderList = () => {
         const decoded = jwt_decode(token);
         const customerId = decoded._id; // Adjust if your token payload differs
 
-        const { data } = await axios.get(`http://localhost:5001/api/orders/customer/${customerId}`, {
+        const { data } = await axios.get(`https://op-backend-lgam.onrender.com/api/orders/customer/${customerId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(data.orders);

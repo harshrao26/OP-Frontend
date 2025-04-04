@@ -8,7 +8,7 @@ const Seller = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     axios
-      .get('http://localhost:5001/api/seller/products/dashboard', {
+      .get('https://op-backend-lgam.onrender.com/api/seller/products/dashboard', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
