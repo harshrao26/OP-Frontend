@@ -96,7 +96,7 @@ const SellerRegister = () => {
         },
       };
       await axios.post(
-        "https://op-backend-lgam.onrender.com/api/seller/auth/register",
+        "http://localhost:5001/api/seller/auth/register",
         payload
       );
       toast.success("Seller registered successfully!");

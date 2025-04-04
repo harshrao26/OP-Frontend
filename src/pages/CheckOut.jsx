@@ -6,6 +6,7 @@ import banner1 from '../assets/banner/buy2.jpeg';
 import banner2 from '../assets/banner/tws.jpeg';
 import banner3 from '../assets/banner/shila.jpeg';
 
+// Simple Carousel Component
 const Carousel = () => {
   const images = [banner1, banner2, banner3];
   const [current, setCurrent] = useState(0);
@@ -33,25 +34,33 @@ const Carousel = () => {
 
 const CheckoutPage = () => {
   const { cart, clearCart } = useCart();
+  
+  // Updated shipping state with required fields.
   const [shipping, setShipping] = useState({
-    name: '',
-    address: '',
+    fullName: '',
+    addressLine1: '',
+    state: '',
+    phone: '',
     city: '',
     postalCode: '',
     country: ''
   });
+  
   const [upiId, setUpiId] = useState('');
   const [selectedPayment, setSelectedPayment] = useState('razorpay');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  // Handle shipping form input changes
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
     setShipping({ ...shipping, [name]: value });
   };
 
+  // Allow shipping only for Lucknow (city check remains as before)
   const isLucknow = shipping.city.trim().toLowerCase() === 'lucknow';
 
+  // Calculate order amounts
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const platformFee = 50;
   const deliveryCharge = subtotal > 500 ? 0 : 40;
@@ -65,20 +74,25 @@ const CheckoutPage = () => {
       return;
     }
     setLoading(true);
+
+    // Build payload with required shipping fields.
     const payload = {
+      sellerId: cart[0]?.sellerId,
       products: cart.map(item => ({
         productId: item.id,
         quantity: item.quantity
       })),
-      shipping,
+      shippingAddress: shipping,
+      paymentStatus: "Pending",
+      status: "Pending",
       payment: selectedPayment,
-      upiId: selectedPayment === 'upi' ? upiId : undefined
+      upiId: selectedPayment === 'upi' ? upiId : undefined,
     };
-  
+
     const token = localStorage.getItem("token");
-  
+
     try {
-      const response = await axios.post("https://op-backend-lgam.onrender.com/api/customer/products/purchase", payload, {
+      const response = await axios.post("http://localhost:5001/api/customer/products/purchase-order", payload, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
@@ -86,7 +100,6 @@ const CheckoutPage = () => {
       });
       console.log("API Response:", response.data);
       setMessage("Purchase successful!");
-      // Safeguard clearCart: ensure it's a function before calling it.
       if (clearCart && typeof clearCart === 'function') {
         clearCart();
       }
@@ -97,65 +110,95 @@ const CheckoutPage = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <Carousel />
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        {message && <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">{message}</div>}
+        {message && (
+          <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">
+            {message}
+          </div>
+        )}
         <div className="flex flex-col md:flex-row gap-6">
           {/* Checkout Form */}
           <div className="md:w-2/3">
             <form onSubmit={handleSubmit}>
               <section className="mb-6">
                 <h3 className="text-xl font-semibold mb-4">Shipping Information</h3>
+                {/* Full Name */}
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">Name</label>
+                  <label className="block text-gray-700 font-medium mb-2">Full Name</label>
                   <input
                     type="text"
-                    name="name"
-                    value={shipping.name}
+                    name="fullName"
+                    value={shipping.fullName}
                     onChange={handleShippingChange}
                     required
                     className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
                   />
                 </div>
+                {/* Phone */}
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">Address</label>
+                  <label className="block text-gray-700 font-medium mb-2">Phone</label>
                   <input
-                    type="text"
-                    name="address"
-                    value={shipping.address}
+                    type="tel"
+                    name="phone"
+                    value={shipping.phone}
                     onChange={handleShippingChange}
                     required
                     className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
                   />
                 </div>
-                <div className="mb-4 flex flex-col sm:flex-row sm:space-x-4">
-                  <div className="sm:w-1/2">
-                    <label className="block text-gray-700 font-medium mb-2">City</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={shipping.city}
-                      onChange={handleShippingChange}
-                      required
-                      className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
-                    />
-                  </div>
-                  <div className="sm:w-1/2 mt-4 sm:mt-0">
-                    <label className="block text-gray-700 font-medium mb-2">Postal Code</label>
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={shipping.postalCode}
-                      onChange={handleShippingChange}
-                      required
-                      className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
-                    />
-                  </div>
+                {/* Address Line 1 */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Address Line 1</label>
+                  <input
+                    type="text"
+                    name="addressLine1"
+                    value={shipping.addressLine1}
+                    onChange={handleShippingChange}
+                    required
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
+                  />
                 </div>
+                {/* State */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">State</label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={shipping.state}
+                    onChange={handleShippingChange}
+                    required
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
+                  />
+                </div>
+                {/* City */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={shipping.city}
+                    onChange={handleShippingChange}
+                    required
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
+                  />
+                </div>
+                {/* Postal Code */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Postal Code</label>
+                  <input
+                    type="text"
+                    name="postalCode"
+                    value={shipping.postalCode}
+                    onChange={handleShippingChange}
+                    required
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:border-blue-300"
+                  />
+                </div>
+                {/* Country */}
                 <div className="mb-4">
                   <label className="block text-gray-700 font-medium mb-2">Country</label>
                   <input
@@ -172,7 +215,7 @@ const CheckoutPage = () => {
                 )}
               </section>
 
-              {/* Payment Method */}
+              {/* Payment Method Section */}
               {isLucknow && (
                 <section className="mb-6">
                   <h3 className="text-xl font-semibold mb-4">Payment Method</h3>

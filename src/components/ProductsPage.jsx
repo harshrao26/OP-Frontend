@@ -5,17 +5,24 @@ import ProductCard from "./ProductCard";
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
 
+
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get("https://op-backend-lgam.onrender.com/api/customer/products/all");
         setProducts(data);
+
+        console.log("Fetched products:", data); 
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
     fetchProducts();
   }, []);
+
+
+
 
   return (
     <div className="container mx-auto px-4 py-8">

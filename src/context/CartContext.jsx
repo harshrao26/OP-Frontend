@@ -34,24 +34,31 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, []);
 
-  // Persist cart changes to localStorage
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
+    console.log("Persisted cart to localStorage:", cart);
   }, [cart]);
 
-  const updateCartInBackend = async (productId, quantity) => {
+  const updateCartInBackend = async (productId, quantity, sellerId) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         console.warn("No token found, user might be logged out.");
         return;
       }
-    
-      console.log("Updating cart for product:", productId, "with quantity:", quantity);
-    
-      const response = await axios.post(
+
+      console.log(
+        "Updating cart for product:",
+        productId,
+        "with quantity:",
+        quantity,
+        "and sellerId:",
+        sellerId
+      );
+
+      await axios.post(
         "https://op-backend-lgam.onrender.com/api/customer/products/cart/add-product",
-        { productId, quantity },
+        { productId, quantity, sellerId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,8 +66,8 @@ export const CartProvider = ({ children }) => {
           },
         }
       );
-    
-      console.log("Cart updated successfully:", response.data);
+
+      console.log("Cart updated successfully");
     } catch (error) {
       console.error("Error updating cart in backend:", error.response?.data || error);
     }
@@ -81,12 +88,11 @@ export const CartProvider = ({ children }) => {
       }
       // Update backend for the specific product
       const updatedItem = newCart.find((item) => item.id === product.id);
-      updateCartInBackend(product.id, updatedItem.quantity);
+      updateCartInBackend(product.id, updatedItem.quantity, product.sellerId);
       return newCart;
     });
   };
 
-  // Increase quantity (respecting stock limits)
   const increaseQuantity = (productId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.map((item) =>
@@ -95,12 +101,13 @@ export const CartProvider = ({ children }) => {
           : item
       );
       const updatedItem = updatedCart.find((item) => item.id === productId);
-      if (updatedItem) updateCartInBackend(productId, updatedItem.quantity);
+      if (updatedItem) {
+        updateCartInBackend(productId, updatedItem.quantity, updatedItem.sellerId);
+      }
       return updatedCart;
     });
   };
 
-  // Decrease quantity (removing item if quantity falls to 0)
   const decreaseQuantity = (productId) => {
     setCart((prevCart) => {
       const updatedCart = prevCart
@@ -113,19 +120,19 @@ export const CartProvider = ({ children }) => {
 
       const updatedItem = updatedCart.find((item) => item.id === productId);
       if (updatedItem) {
-        updateCartInBackend(productId, updatedItem.quantity);
+        updateCartInBackend(productId, updatedItem.quantity, updatedItem.sellerId);
       } else {
-        updateCartInBackend(productId, 0);
+        updateCartInBackend(productId, 0, prevCart.find(item => item.id === productId)?.sellerId);
       }
       return updatedCart;
     });
   };
 
-  // New: Clear the entire cart once purchase is successful
+  // Clear the entire cart once purchase is successful
   const clearCart = () => {
     setCart([]);
     localStorage.removeItem("cart");
-    // Optionally, you could also update the backend to clear the cart.
+    // Optionally, update the backend to clear the cart.
   };
 
   return (

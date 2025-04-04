@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useEffect } from "react";
 
 const CartPage = () => {
   const { cart, decreaseQuantity, increaseQuantity, removeFromCart } = useCart();
@@ -13,6 +14,11 @@ const CartPage = () => {
 
   // Check if user is logged in by looking for a token
   const isLoggedIn = !!localStorage.getItem("token");
+
+  useEffect(() => {
+    console.log("Cart contents:", cart);
+  }, [cart]);
+  
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -13,22 +13,15 @@ const ProductDetails = () => {
   const [suggested, setSuggested] = useState([]);
 
   useEffect(() => {
+    // Scroll to top on mount
+    window.scrollTo({ top: 0, behavior: "auto" });
+    document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
 
-
-      // Ensure scrolling to the top of the document when the component is mounted
-      window.scrollTo({
-        top: 0,
-        behavior: "auto", // You can use "auto" for instant scroll
-      });
-  
-      // As a fallback, scroll the root element
-      document.documentElement.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`https://op-backend-lgam.onrender.com/api/customer/products/${id}`);
+        const { data } = await axios.get(
+          `https://op-backend-lgam.onrender.com/api/customer/products/${id}`
+        );
         setProduct(data);
         if (data.images && data.images.length > 0) {
           setMainImage(data.images[0]);
@@ -42,8 +35,10 @@ const ProductDetails = () => {
 
     const fetchSuggested = async () => {
       try {
-        const { data } = await axios.get("https://op-backend-lgam.onrender.com/api/customer/products/all");
-        const filtered = data.filter(p => p._id !== id).slice(0, 6); // exclude current product
+        const { data } = await axios.get(
+          "https://op-backend-lgam.onrender.com/api/customer/products/all"
+        );
+        const filtered = data.filter((p) => p._id !== id).slice(0, 6); // exclude current product
         setSuggested(filtered);
       } catch (error) {
         console.error("Error fetching suggested products:", error);
@@ -54,9 +49,12 @@ const ProductDetails = () => {
     fetchSuggested();
   }, [id]);
 
-  if (!product) return <p className="text-gray-500 text-center">Loading product details...</p>;
+  if (!product)
+    return (
+      <p className="text-gray-500 text-center">Loading product details...</p>
+    );
 
-  const cartItem = cart.find(item => item.id === product._id);
+  const cartItem = cart.find((item) => item.id === product._id);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
 
   const handleAddToCart = () => {
@@ -66,10 +64,11 @@ const ProductDetails = () => {
       price: product.price,
       image: mainImage,
       stock: product.stock,
+      sellerId: product.sellerId, // pass sellerId here
     });
-    toast.success('Item added to cart', {
-      position: 'top-right',
-      style: { background: '#333', color: '#fff' },
+    toast.success("Item added to cart", {
+      position: "top-right",
+      style: { background: "#333", color: "#fff" },
     });
   };
 
@@ -114,7 +113,9 @@ const ProductDetails = () => {
         {/* Right Content Section */}
         <div className="w-full md:w-1/2">
           <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
-          <p className="text-green-600 font-semibold text-2xl mt-2">₹{product.price}</p>
+          <p className="text-green-600 font-semibold text-2xl mt-2">
+            ₹{product.price}
+          </p>
 
           {product.stock < 10 && product.stock > 0 && (
             <p className="text-red-500 mt-2">Only a few left in stock!</p>
@@ -122,35 +123,31 @@ const ProductDetails = () => {
 
           {/* Add to Cart / Quantity Controls */}
           {product.stock <= 0 ? (
-            <div className="mt-4 text-red-500 font-semibold">
-              Out of Stock
-            </div>
+            <div className="mt-4 text-red-500 font-semibold">Out of Stock</div>
+          ) : quantityInCart === 0 ? (
+            <button
+              onClick={handleAddToCart}
+              className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded-md"
+            >
+              Add to Cart
+            </button>
           ) : (
-            quantityInCart === 0 ? (
+            <div className="flex items-center mt-6">
               <button
-                onClick={handleAddToCart}
-                className="mt-4 bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded-md"
+                onClick={() => decreaseQuantity(product._id)}
+                className="bg-gray-300 text-black px-4 py-2 rounded-l-md hover:bg-gray-400"
               >
-                Add to Cart
+                -
               </button>
-            ) : (
-              <div className="flex items-center mt-6">
-                <button
-                  onClick={() => decreaseQuantity(product._id)}
-                  className="bg-gray-300 text-black px-4 py-2 rounded-l-md hover:bg-gray-400"
-                >
-                  -
-                </button>
-                <span className="px-4 py-2 border">{quantityInCart}</span>
-                <button
-                  onClick={() => increaseQuantity(product._id)}
-                  disabled={quantityInCart >= product.stock}
-                  className="bg-gray-300 text-black px-4 py-2 rounded-r-md hover:bg-gray-400 disabled:opacity-50"
-                >
-                  +
-                </button>
-              </div>
-            )
+              <span className="px-4 py-2 border">{quantityInCart}</span>
+              <button
+                onClick={() => increaseQuantity(product._id)}
+                disabled={quantityInCart >= product.stock}
+                className="bg-gray-300 text-black px-4 py-2 rounded-r-md hover:bg-gray-400 disabled:opacity-50"
+              >
+                +
+              </button>
+            </div>
           )}
 
           {/* Description */}
@@ -163,17 +160,17 @@ const ProductDetails = () => {
 
       {/* Suggested Products */}
       <div className="mt-16">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800">You may also like</h2>
-      
-
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+          You may also like
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {suggested.map((product) => (
             <ProductCard
               key={product._id}
               id={product._id}
               image={
-                product.images && product.images.length > 0 
-                  ? product.images[0] 
+                product.images && product.images.length > 0
+                  ? product.images[0]
                   : product.image
               }
               name={product.name}
@@ -181,8 +178,8 @@ const ProductDetails = () => {
             />
           ))}
         </div>
-        </div>
       </div>
+    </div>
   );
 };
 

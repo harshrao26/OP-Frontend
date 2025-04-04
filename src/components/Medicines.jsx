@@ -8,7 +8,7 @@ const NatureMedicaProducts = () => {
   useEffect(() => {
     const fetchNatureMedica = async () => {
       try {
-        const res = await axios.get("https://op-backend-lgam.onrender.com/api/customer/products/all");
+        const res = await axios.get("http://localhost:5001/api/customer/products/all");
         const filtered = res.data.filter((item) => item.brand === "Medicines");
         setProducts(filtered);
       } catch (err) {

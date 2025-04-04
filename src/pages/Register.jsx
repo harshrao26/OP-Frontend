@@ -16,7 +16,7 @@ export default function Register() {
       return;
     }
     try {
-      await axios.post("https://op-backend-lgam.onrender.com/api/verify/register", {
+      await axios.post("http://localhost:5001/api/verify/register", {
         step: "send_otp",
         phone: `+91${phone}`,
       });
@@ -33,7 +33,7 @@ export default function Register() {
       return;
     }
     try {
-      await axios.post("https://op-backend-lgam.onrender.com/api/verify/register", {
+      await axios.post("http://localhost:5001/api/verify/register", {
         step: "verify_otp",
         phone: `+91${phone}`,
         otp,
@@ -52,7 +52,7 @@ export default function Register() {
       return;
     }
     try {
-      await axios.post("https://op-backend-lgam.onrender.com/api/customer/auth/register", {
+      await axios.post("http://localhost:5001/api/customer/auth/register", {
         name,
         email,
         phone: `+91${phone}`,
