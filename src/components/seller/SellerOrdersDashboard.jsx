@@ -11,7 +11,7 @@ const SellerOrdersDashboard = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:5001/api/seller/products/orders",
+          "https://op-backend-lgam.onrender.com//api/seller/products/orders",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -33,7 +33,7 @@ const SellerOrdersDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5001/api/seller/products/orders/${selectedOrder._id}`,
+        `https://op-backend-lgam.onrender.com//api/seller/products/orders/${selectedOrder._id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
