@@ -14,7 +14,7 @@ import shop from '../assets/login/shop.png'
 import shop2 from '../assets/login/shop2.png'
 import shop3 from '../assets/login/shop3.png'
 
-const API_BASE_URL = "http://localhost:5001/api";
+const API_BASE_URL = "https://op-backend-lgam.onrender.com/api";
 
 // Simple regex patterns
 const phoneRegex = /^[0-9]{10}$/;
@@ -53,7 +53,7 @@ const CustomerAuth = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:5001/api/verify/register", {
+      await axios.post("https://op-backend-lgam.onrender.com/api/verify/register", {
         step: "send_otp",
         phone: `+91${phone}`,
       });
@@ -70,7 +70,7 @@ const CustomerAuth = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:5001/api/verify/register", {
+      await axios.post("https://op-backend-lgam.onrender.com/api/verify/register", {
         step: "verify_otp",
         phone: `+91${phone}`,
         otp,
@@ -100,7 +100,7 @@ const CustomerAuth = () => {
     }
 
     try {
-      await axios.post(`http://localhost:5001/api/customer/auth/register`, {
+      await axios.post(`https://op-backend-lgam.onrender.com/api/customer/auth/register`, {
         name,
         email,
         password,
