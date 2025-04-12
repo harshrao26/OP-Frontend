@@ -14,7 +14,7 @@ import shop from '../assets/login/shop.png'
 import shop2 from '../assets/login/shop2.png'
 import shop3 from '../assets/login/shop3.png'
 
-const API_BASE_URL = "https://op-backend-lgam.onrender.com/api";
+const API_BASE_URL = "http://localhost:5001/api";
 
 // Simple regex patterns
 const phoneRegex = /^[0-9]{10}$/;
@@ -53,7 +53,7 @@ const CustomerAuth = () => {
       return;
     }
     try {
-      await axios.post("https://op-backend-lgam.onrender.com/api/verify/register", {
+      await axios.post("http://localhost:5001/api/verify/register", {
         step: "send_otp",
         phone: `+91${phone}`,
       });
@@ -70,7 +70,7 @@ const CustomerAuth = () => {
       return;
     }
     try {
-      await axios.post("https://op-backend-lgam.onrender.com/api/verify/register", {
+      await axios.post("http://localhost:5001/api/verify/register", {
         step: "verify_otp",
         phone: `+91${phone}`,
         otp,
@@ -100,7 +100,7 @@ const CustomerAuth = () => {
     }
 
     try {
-      await axios.post(`https://op-backend-lgam.onrender.com/api/customer/auth/register`, {
+      await axios.post(`http://localhost:5001/api/customer/auth/register`, {
         name,
         email,
         password,
@@ -287,9 +287,9 @@ const CustomerAuth = () => {
        
        
        
-        <h2 className="text-3xl font-bold mb-4">Connect with every application</h2>
-        <p className="text-lg max-w-sm text-center">
-          Everything you need in an easily customizable dashboard.
+        <h2 className="text-6xl font-bold mb-4">Let's Shop Now</h2>
+        <p className="text-lg max-w-sm text-center bg--500">
+          Get Everything you need at your doorstep. Shop with us today!
         </p>
       </div>
     </div>

@@ -1,248 +1,229 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { User, Package, AlertCircle, X } from "lucide-react";
+import {
+  User,
+  Package,
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import Loader from "./Loader";
+
+// Reusable Badge component
+const StatusBadge = ({ text }) => {
+  const styles = {
+    Paid: "bg-green-100 text-green-800",
+    Pending: "bg-yellow-100 text-yellow-800",
+    Delivered: "bg-green-100 text-green-800",
+    Shipped: "bg-blue-100 text-blue-800",
+    "Prepared for Shipping": "bg-purple-100 text-purple-800",
+    Default: "bg-gray-100 text-gray-600",
+  };
+  return (
+    <span
+      className={`text-xs px-2 py-1 rounded font-medium ${
+        styles[text] || styles.Default
+      }`}
+    >
+      {text}
+    </span>
+  );
+};
+
+const OrderCard = ({ order }) => {
+  const [expanded, setExpanded] = useState(false);
+  const toggle = () => setExpanded((prev) => !prev);
+
+  const product = order.products?.[0]?.productId;
+
+  return (
+    <div className="bg-white border  border-blue-200 rounded-lg shadow-sm hover:shadow-md transition-shadow mb-4">
+      {/* Summary row */}
+      <div className="p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          <img
+            src={product?.images?.[0] || "https://via.placeholder.com/80"}
+            alt={product?.name}
+            className="w-20 h-20 object-cover rounded "
+          />
+          <div>
+            <p className="font-semibold text-blue-700 text-sm">{product?.name}</p>
+            <p className="text-sm text-gray-600">₹{product?.price}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm">
+          <div className="flex gap-2">
+            <StatusBadge text={order.paymentStatus} />
+            <StatusBadge text={order.status} />
+          </div>
+          <button
+            onClick={toggle}
+            className="text-blue-600 hover:underline flex items-center gap-1 mt-2 md:mt-0 w-28 "
+          >
+            {expanded ? (
+              <>
+                Hide Details <ChevronUp size={16} />
+              </>
+            ) : (
+              <>
+                View Details <ChevronDown size={16} />
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Expandable content */}
+      <div
+        className={`transition-all overflow-hidden duration-300 ease-in-out ${
+          expanded ? "max-h-screen p-4 pt-0" : "max-h-0"
+        }`}
+      >
+        <div className="text-sm text-gray-700">
+          <div className="border-t py-3">
+            <p>
+              <strong>Order ID:</strong> {order._id}
+            </p>
+            <p>
+              <strong>Quantity:</strong> {order.products?.[0]?.quantity}
+            </p>
+            <p>
+              <strong>Total:</strong> ₹{order.totalAmount}
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded p-3">
+            <p className="font-semibold text-sm mb-2">Shipping Address</p>
+            <p>{order.shippingAddress?.fullName}</p>
+            <p>{order.shippingAddress?.addressLine1}</p>
+            <p>
+              {order.shippingAddress?.city}, {order.shippingAddress?.state} -{" "}
+              {order.shippingAddress?.postalCode}
+            </p>
+            <p>{order.shippingAddress?.country}</p>
+            <p>Phone: {order.shippingAddress?.phone}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const OrdersTab = ({ orders, type }) => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">
+      {type === "current" ? "Current Orders" : "Past Orders"}
+    </h2>
+    {orders.length ? (
+      orders.map((order) => <OrderCard key={order._id} order={order} />)
+    ) : (
+      <p className="text-gray-500">No {type} orders.</p>
+    )}
+  </div>
+);
+
+const ProfileTab = ({ profile }) => (
+  <div>
+    <h2 className="text-2xl font-bold flex items-center mb-4">
+      <User className="mr-2" /> Profile
+    </h2>
+    <div className="space-y-2 text-sm text-gray-700">
+      <p>
+        <strong>Name:</strong> {profile.name}
+      </p>
+      <p>
+        <strong>Email:</strong> {profile.email}
+      </p>
+      <p>
+        <strong>Phone:</strong> {profile.phone}
+      </p>
+    </div>
+  </div>
+);
 
 const CustomerDashboard = () => {
-  const [profileData, setProfileData] = useState(null);
-  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
-
-  const [selectedOrder, setSelectedOrder] = useState(null);
-
-  const handleOrderClick = (order) => {
-    setSelectedOrder(order);
-  };
-
-  const handleClose = () => {
-    setSelectedOrder(null);
-  };
+  const [profileData, setProfileData] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          setError("No token found");
-          return;
-        }
-        const { data } = await axios.get(
-          "https://op-backend-lgam.onrender.com/api/customer/auth/profile",
-          { headers: { Authorization: `Bearer ${token}` } }
+        const res = await axios.get(
+          "http://localhost:5001/api/customer/auth/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-        setProfileData(data);
-      } catch {
-        setError("Error fetching profile");
+        setProfileData(res.data);
+      } catch (err) {
+        setError("Failed to load profile");
       }
     };
-    fetchProfile();
+
+    fetchData();
   }, []);
 
   if (error)
     return (
-      <div className="flex items-center text-red-500 p-4">
-        <AlertCircle className="mr-2" /> {error}
+      <div className="text-red-600 p-4 flex items-center gap-2">
+        <AlertCircle size={18} /> {error}
       </div>
     );
-  if (!profileData) return <div className="p-4">Loading...</div>;
 
-  const { profile, pastOrders, currentOrders } = profileData;
+  if (!profileData) return <div className="p-4 h-screen w-full flex items-center justify-center">
+
+<Loader />
+  </div>;
+
+  const { profile, currentOrders, pastOrders } = profileData;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-l mx-auto bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row">
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg flex flex-col md:flex-row overflow-hidden">
         {/* Sidebar */}
-        <aside className="md:w-1/4 bg-blue-500 text-white">
-          <div className="p-6 border-b border-blue-400 text-center font-bold text-2xl">
+        <aside className="md:w-1/4 bg-blue-600 text-white">
+          <div className="text-center py-5 font-bold text-2xl border-b border-blue-400">
             Dashboard
           </div>
-          <nav className="flex flex-col">
+          <div className="flex flex-col">
             <button
+              className={`p-4 text-left hover:bg-blue-700 ${
+                activeTab === "profile" && "bg-blue-700"
+              }`}
               onClick={() => setActiveTab("profile")}
-              className={`p-4 text-left hover:bg-blue-600 flex items-center gap-2 ${
-                activeTab === "profile" && "bg-blue-600"
-              }`}
             >
-              <User className="w-5 h-5" />
-              Profile
+              <User className="inline mr-2" /> Profile
             </button>
             <button
-              onClick={() => setActiveTab("orders")}
-              className={`p-4 text-left hover:bg-blue-600 flex items-center gap-2 ${
-                activeTab === "orders" && "bg-blue-600"
+              className={`p-4 text-left hover:bg-blue-700 ${
+                activeTab === "current" && "bg-blue-700"
               }`}
+              onClick={() => setActiveTab("current")}
             >
-              <Package className="w-5 h-5" />
-              Orders
+              <Package className="inline mr-2" /> Current Orders
             </button>
-          </nav>
+            <button
+              className={`p-4 text-left hover:bg-blue-700 ${
+                activeTab === "past" && "bg-blue-700"
+              }`}
+              onClick={() => setActiveTab("past")}
+            >
+              <Package className="inline mr-2" /> Past Orders
+            </button>
+          </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {activeTab === "profile" && (
-            <div>
-              <h2 className="text-2xl font-bold flex items-center mb-4">
-                <User className="mr-2" /> Profile Details
-              </h2>
-              <div className="space-y-3 text-gray-700">
-                <div>
-                  <span className="font-semibold">Name:</span> {profile.name}
-                </div>
-                <div>
-                  <span className="font-semibold">Email:</span> {profile.email}
-                </div>
-                <div>
-                  <span className="font-semibold">Phone:</span> {profile.phone}
-                </div>
-              </div>
-            </div>
+        {/* Main content */}
+        <main className="flex-1 p-6 bg-white">
+          {activeTab === "profile" && <ProfileTab profile={profile} />}
+          {activeTab === "current" && (
+            <OrdersTab orders={currentOrders} type="current" />
           )}
-
-          {activeTab === "orders" && (
-            <div>
-              <h2 className="text-2xl font-bold flex items-center mb-4">
-                <Package className="mr-2" /> Your Orders
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Current Orders */}
-                <div>
-                  {/* Orders Grid */}
-                  {currentOrders.length ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {currentOrders.map((order) => (
-                        <div
-                          key={order._id}
-                          className="cursor-pointer  p-4"
-                          onClick={() => handleOrderClick(order)}
-                        >
-                          <div className="flex items-center space-x-2 mb-2">
-                            <Package className="text-gray-600 w-5 h-5" />
-                            <p className="font-semibold text-gray-800">
-                              Order ID:{" "}
-                              <span className="font-normal">{order._id}</span>
-                            </p>
-                          </div>
-                          <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Status:</span>{" "}
-                            {order.status}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600">No current orders.</p>
-                  )}
-
-                  {/* Modal Popup */}
-                  {selectedOrder && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#000000a1] bg-opacity-50">
-                      {/* Modal Content */}
-                      <div className="relative bg-white w-full max-w-md mx-4 p-6 rounded-lg shadow-lg">
-                        {/* Close Button */}
-                        <button
-                          onClick={handleClose}
-                          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-                        >
-                          <X className="w-6 h-6" />
-                        </button>
-
-                        {/* Order Details */}
-                        <h2 className="text-xl font-semibold mb-4">
-                          Order Details
-                        </h2>
-
-                        <div className="mb-2">
-                          <span className="font-semibold">Order ID:</span>{" "}
-                          {selectedOrder._id}
-                        </div>
-
-                        <div className="mb-2">
-                          <span className="font-semibold">Status:</span>{" "}
-                          {selectedOrder.status}
-                        </div>
-
-                        <div className="mb-2">
-                          <span className="font-semibold">Total Amount:</span> ₹
-                          {selectedOrder.totalAmount}
-                        </div>
-
-                        {/* Shipping Address */}
-                        <div className="mt-4 bg-gray-50 p-3 rounded">
-                          <h3 className="font-semibold mb-2">
-                            Shipping Address
-                          </h3>
-                          <p className="text-sm">
-                            <strong>Full Name:</strong>{" "}
-                            {selectedOrder.shippingAddress?.fullName}
-                          </p>
-                          <p className="text-sm">
-                            <strong>Phone:</strong>{" "}
-                            {selectedOrder.shippingAddress?.phone}
-                          </p>
-                          <p className="text-sm">
-                            <strong>Address Line 1:</strong>{" "}
-                            {selectedOrder.shippingAddress?.addressLine1}
-                          </p>
-                          <p className="text-sm">
-                            <strong>City:</strong>{" "}
-                            {selectedOrder.shippingAddress?.city}
-                          </p>
-                          <p className="text-sm">
-                            <strong>State:</strong>{" "}
-                            {selectedOrder.shippingAddress?.state}
-                          </p>
-                          <p className="text-sm">
-                            <strong>Country:</strong>{" "}
-                            {selectedOrder.shippingAddress?.country}
-                          </p>
-                          <p className="text-sm">
-                            <strong>Postal Code:</strong>{" "}
-                            {selectedOrder.shippingAddress?.postalCode}
-                          </p>
-                        </div>
-
-                        {/* Product(s) Info */}
-                        <div className="mt-4 bg-gray-50 p-3 rounded">
-                          <h3 className="font-semibold mb-2">
-                            Product Details
-                          </h3>
-                          {/* If the order has a single product ID, just display it. If multiple, map over them. */}
-                          {Array.isArray(selectedOrder.productId) ? (
-                            <ul className="list-disc list-inside text-sm space-y-1">
-                              {selectedOrder.productId.map((prod, idx) => (
-                                <li key={idx}>Product ID: {prod}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-sm">
-                              Product ID: {selectedOrder.productId}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                {/* Past Orders */}
-                <div>
-                  <h3 className="text-xl font-semibold mb-3">Past Orders</h3>
-                  {pastOrders.length ? (
-                    pastOrders.map((order) => (
-                      <div
-                        key={order._id}
-                        className="border p-4 rounded-lg shadow hover:shadow-md transition-shadow bg-gray-50"
-                      >
-                        <p className="font-semibold">Order ID:</p>
-                        <p>{order._id}</p>
-                        {/* Additional order details can be added here */}
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-600">No past orders.</p>
-                  )}
-                </div>
-              </div>
-            </div>
+          {activeTab === "past" && (
+            <OrdersTab orders={pastOrders} type="past" />
           )}
         </main>
       </div>

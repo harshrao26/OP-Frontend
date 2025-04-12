@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
-
+import Loader from '../Loader';
 function AllProducts() {
   const token = localStorage.getItem('token');
   const [products, setProducts] = useState([]);
@@ -97,7 +97,10 @@ function AllProducts() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className='flex items-center justify-center h-screen bg-[#fbfbfb]'>
+    
+    <Loader />
+  </div>;
   if (error) return <div className="p-4 text-red-600">{error}</div>;
 
   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard"; // adjust path based on your structure
 import Filters from './Filters'
-
+import Loader from "./Loader";
 const NatureMedicaProducts = () => {
   const [products, setProducts] = useState([]);
 
@@ -21,7 +21,7 @@ const NatureMedicaProducts = () => {
   }, []);
 
   if (products.length === 0) {
-    return <p className="text-center text-gray-500 mt-10">Loading Nature Medica products...</p>;
+    return <p className="text-center text-gray-500 mt-10 flex items-center justify-center h-screen w-full "> <Loader /> </p>;
   }
 
   return (

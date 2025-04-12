@@ -14,7 +14,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
       <div className="p-4">
         <h3 className="text-xl font-bold mb-1">{product.name}</h3>
         <p className="text-gray-700">
-          <span className="font-semibold">Price:</span> ${product.price}
+          <span className="font-semibold">Price:</span> ₹{product.price}
         </p>
         <p className="text-gray-700">
           <span className="font-semibold">Category:</span> {product.category}

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
 import ProductCard from "./ProductCard";
+import Loader from './Loader'
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -51,7 +52,10 @@ const ProductDetails = () => {
 
   if (!product)
     return (
-      <p className="text-gray-500 text-center">Loading product details...</p>
+      <p className="text-gray-500 text-center w-full h-screen flex items-center justify-center bg-[#FBFBFB]">
+        
+        <Loader />
+      </p>
     );
 
   const cartItem = cart.find((item) => item.id === product._id);

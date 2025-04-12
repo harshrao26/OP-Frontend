@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, Store, LogOut, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, Store, LogOut, Menu, X, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
 import logo from "../assets/logoo.png";
+
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -107,15 +108,22 @@ const Navbar = () => {
             )}
           </Link>
           {user ? (
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
+          {user.role !== "seller" && (
+            <>
+              <p>👋 Welcome, {user.name}</p>
               <Link to="/profile" className="text-gray-700 hover:text-blue-600">
-                Profile
+                <p className="bg-blue-600 text-white p-1 rounded-full">
+                  <User />
+                </p>
               </Link>
-              <LogOut
-                className="w-8 h-8 p-2 bg-red-500 rounded-full text-white cursor-pointer hover:bg-red-600"
-                onClick={logout}
-              />
-            </div>
+            </>
+          )}
+          <LogOut
+            className="w-8 h-8 p-2 bg-red-500 rounded-full text-white cursor-pointer hover:bg-red-600"
+            onClick={logout}
+          />
+        </div>
           ) : (
             <Link to="/login" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
               Login

@@ -9,11 +9,11 @@ const Footer = () => {
           {/* Contact Us */}
           <div>
             <h4 className="font-bold mb-4">Contact Us</h4>
-            <p>Nature Media Pvt. Ltd.</p>
-            <p>1234, MG Road</p>
+            <p>Online Planet Pvt. Ltd.</p>
+            <p>1st Floor LHPS Building, Sector-7, Vikas Nagar</p>
             <p>Lucknow, Uttar Pradesh, 226001</p>
-            <p>Email: support@naturemedia.com</p>
-            <p>Phone: +91 12345 67890</p>
+            <p>Email: support@onlineplanet.in</p>
+            <p>Phone: +91 9721080912</p>
           </div>
 
           {/* About */}
@@ -55,8 +55,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold mb-4">Follow Us</h4>
             <div className="flex space-x-4">
-              <a href="https://www.facebook.com/naturemedia" className="hover:underline">Facebook</a>
-              <a href="https://www.twitter.com/naturemedia" className="hover:underline">Twitter</a>
+              <a href="https://www.facebook.com/profile.php?id=61575003118983" className="hover:underline">Facebook</a>
               <a href="https://www.instagram.com/naturemedia" className="hover:underline">Instagram</a>
               <a href="https://www.linkedin.com/company/naturemedia" className="hover:underline">LinkedIn</a>
             </div>
@@ -67,13 +66,8 @@ const Footer = () => {
       {/* Bottom Section */}
       <div className="bg-gray-900 py-4 mt-10">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; 2025 Nature Media Pvt. Ltd. All rights reserved.</p>
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <img src="/images/payment-visa.png" alt="Visa" className="h-6" />
-            <img src="/images/payment-mastercard.png" alt="MasterCard" className="h-6" />
-            <img src="/images/payment-paypal.png" alt="PayPal" className="h-6" />
-            <img src="/images/payment-rupay.png" alt="RuPay" className="h-6" />
-          </div>
+          <p>&copy; 2025 Online Planet Pvt. Ltd. All rights reserved.</p>
+          
         </div>
       </div>
     </footer>
