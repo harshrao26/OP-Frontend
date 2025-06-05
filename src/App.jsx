@@ -30,7 +30,7 @@ export default function App() {
   const { user } = useAuth() || {}; // ✅ Ensure `user` is always defined
 
   return (
-    <>
+    <div className="bg-[#fbfbfb]">
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -83,6 +83,7 @@ export default function App() {
       </Routes>
 
       <Footer />
-    </>
+    </div>
   );
 }
+

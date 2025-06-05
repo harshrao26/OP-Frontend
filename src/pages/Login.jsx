@@ -279,6 +279,11 @@ const CustomerAuth = () => {
             Seller Login
           </Link>
         </div>
+        <div className="mt-4 text-center">
+          <Link to="/admin/login" className="text-blue-600 hover:underline">
+            Admin Login
+          </Link>
+        </div>
         </div>
       </div>
 
